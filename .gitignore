@@ -1,0 +1,16 @@
+*.elc
+.cask
+*~
+*.~undo-tree
+.cache
+auto-save-list
+backups
+eln-cache
+elpa
+parinfer-rust
+straight
+.emacs.desktop
+bookmarks
+history
+network-security.data
+recentf
