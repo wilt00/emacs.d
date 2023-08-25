@@ -361,12 +361,16 @@
          ("C-h C" . helpful-command)
          ("C-c C-d" . helpful-at-point)))
 
+(use-package git-gutter
+  :hook (prog-mode . git-gutter-mode)
+  :config (setq git-gutter:update-interval 0.02))
+
+(use-package git-gutter-fringe)
+
+(use-package magit)
+
 ;;; TODO
-;;; Git-Gutter
-;;; https://ianyepan.github.io/posts/emacs-git-gutter/
-;;; Ergoemacs
 ;;; Whitespace
-;;; Fix tab spacing
 ;;; aliases: (defalias 'f 'foo-command) https://www.wilkesley.org/~ian/xah/emacs/emacs_alias.html
 ;;; Folding? seems hard
 ;;; tree-sitter https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
