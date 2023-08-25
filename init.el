@@ -14,6 +14,7 @@
 
 ;;; Code:
 
+(setq straight-repository-branch "develop")
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -126,6 +127,7 @@
 ;;   :init (vertico-mode))
 
 (use-package corfu
+  :straight (:files (:defaults "extensions/*.el"))
   :custom
   (corfu-auto t)
   (corfu-cycle t)
