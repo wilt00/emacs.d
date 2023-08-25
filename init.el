@@ -31,7 +31,7 @@
 ;; Org needs to be first to avoid package mismatches
 (straight-use-package 'org)
 (setq org-todo-keywords
-      '((sequence "UPNEXT(u!)" "INPROGRESS(i!)" "BLOCKED(b!)" "|" "DONE(d!)")))
+      '((sequence "UPNEXT(u!)" "INPROGRESS(i!)" "ONGOING(o!)" "BLOCKED(b!)" "|" "DONE(d!)")))
 
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
@@ -340,13 +340,24 @@
   :config (set-face-attribute 'org-modern-symbol nil :family "Iosevka"))
 
 (use-package parinfer-rust-mode
-  :hook emacs-lisp-mode
-  :init (setq parinfer-rust-auto-download t))
+  :custom (parinfer-rust-auto-download t)
+  :hook emacs-lisp-mode)
 
 (use-package format-all
   :custom (format-all-show-errors 'warnings)
   :hook (prog-mode-hook . format-all-ensure-formatter))
 
+(use-package editorconfig
+  :config (editorconfig-mode 1))
+
+(use-package helpful
+  :bind (("C-h f" . helpful-callable)
+         ("C-h v" . helpful-variable)
+         ("C-h k" . helpful-key)
+         ("C-h x" . helpful-command)
+         ("C-h F" . helpful-function)
+         ("C-h C" . helpful-command)
+         ("C-c C-d" . helpful-at-point)))
 
 ;;; TODO
 ;;; Git-Gutter
