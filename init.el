@@ -28,6 +28,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(straight-use-package 'benchmark-init)
 ;; Org needs to be first to avoid package mismatches
 (straight-use-package 'org)
 (setq org-todo-keywords
@@ -36,27 +37,34 @@
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 
-(setq inhibit-splash-screen t)		      ;
-(transient-mark-mode)			      ; Enable transient mark mode, default in v23 and newer
-(setq default-visible-bell t)		      ; Disable Windows bell
-(tool-bar-mode 0)			      ; Hide icon bar
-(set-terminal-coding-system 'utf-8)	      ; UTF-8 all the things
-(set-language-environment 'utf-8)	      ;
-(set-keyboard-coding-system 'utf-8)	      ;
-(prefer-coding-system 'utf-8)		      ;
-(setq locale-coding-system 'utf-8)	      ;
-(set-default-coding-systems 'utf-8)	      ;
-(set-terminal-coding-system 'utf-8)	      ;
-(recentf-mode 1)			      ; Recent files
-(run-at-time nil (* 5 60) 'recentf-save-list) ;
-(desktop-save-mode 1)			      ; Reopen files on program launch
-;; (setq indent-tabs-mode nil)		      ; Don't use tabs for indentation or alignment
+(setq inhibit-splash-screen t)                       ;
+(transient-mark-mode)                                ; Enable transient mark mode, default in v23 and newer
+(setq-default visible-bell t)                        ; Disable Windows bell
+(setq-default buffer-file-coding-system 'utf-8-unix) ; Use LF
+(tool-bar-mode 0)                                    ; Hide icon bar
+(set-terminal-coding-system 'utf-8)                  ; UTF-8 all the things
+(set-language-environment 'utf-8)                    ;
+(set-keyboard-coding-system 'utf-8)                  ;
+(prefer-coding-system 'utf-8)                        ;
+(setq locale-coding-system 'utf-8)                   ;
+(set-default-coding-systems 'utf-8)                  ;
+(set-terminal-coding-system 'utf-8)                  ;
+(recentf-mode 1)                                     ; Recent files
+(run-at-time nil (* 5 60) 'recentf-save-list)        ;
+(desktop-save-mode 1)                                ; Reopen files on program launch
+(setq indent-tabs-mode nil)                          ; Don't use tabs for indentation or alignment
 
-(if (display-graphic-p)
-    (progn
-      ;; (add-to-list 'default-frame-alist '(alpha . 95))
-      (set-frame-width (selected-frame) 105)
-      (set-frame-height (selected-frame) 70)))
+(define-key global-map (kbd "C-z") 'undo)
+(define-key global-map (kbd "C-/") 'isearch-forward)
+(define-key global-map (kbd "C-s") 'save-buffer)
+(define-key global-map (kbd "C-v") 'yank)
+(define-key org-mode-map (kbd "C-v") 'org-yank)
+
+;; (if (display-graphic-p)
+;;     (progn
+;;       ;; (add-to-list 'default-frame-alist '(alpha . 95))
+;;       (set-frame-width (selected-frame) 105)
+;;       (set-frame-height (selected-frame) 70)))
 
 ;; (setq backup-directory-alist
 ;;       `(("." . ,(concat user-emacs-directory "backups"))))
@@ -122,8 +130,8 @@
 ;;   (vertico-resize t)
 ;;   :general
 ;;   (:keymaps 'vertico-map
-;; 	    "<tab>" #'vertico-insert ; Insert selected candidate into text area
-;; 	    "<escape>" #'minibuffer-keyboard-quit)
+;;      "<tab>" #'vertico-insert ; Insert selected candidate into text area
+;;      "<escape>" #'minibuffer-keyboard-quit)
 ;;   :init (vertico-mode))
 
 (use-package corfu
@@ -169,8 +177,8 @@
 ;; (use-package ivy
 ;;   :config (ivy-mode)
 ;;   :bind (:map ivy-mode-map
-;; 	      ("C-j" . 'ivy-next-line)
-;; 	      ("C-k" . 'ivy-previous-line)))
+;;        ("C-j" . 'ivy-next-line)
+;;        ("C-k" . 'ivy-previous-line)))
 
 ;; (use-package counsel
 ;;   :after ivy
