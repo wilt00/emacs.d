@@ -58,7 +58,7 @@
 (define-key global-map (kbd "C-/") 'isearch-forward)
 (define-key global-map (kbd "C-s") 'save-buffer)
 (define-key global-map (kbd "C-v") 'yank)
-(define-key org-mode-map (kbd "C-v") 'org-yank)
+;; (define-key org-mode-map (kbd "C-v") 'org-yank)
 
 ;; (if (display-graphic-p)
 ;;     (progn
