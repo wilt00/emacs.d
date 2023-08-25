@@ -1,4 +1,18 @@
-;; -*- mode: elisp -*-
+;;; init.el --- Emacs startup file -*- mode: elisp -*-
+
+;;; Commentary:
+
+;; Setup notes:
+;; Font
+;; - $ scoop bucket add nerd-fonts
+;;   $ scoop install iosevka-nf
+;; Microsoft Mouse and Keyboard Center
+;; - Fix broken scrolling issue
+;; - under 'Vertical Scrolling', add Emacs to "programs that don't scroll correctly"
+;;   to fix partial line scrolling issue
+;; - Seems related to fractional line scrolling issues
+
+;;; Code:
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -342,7 +356,7 @@
 ;;; Folding? seems hard
 ;;; tree-sitter https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
 
-
+;;; init.el ends here
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
