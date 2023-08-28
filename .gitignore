@@ -16,3 +16,5 @@ network-security.data
 recentf
 *.lock
 org-persist
+transient
+projects
