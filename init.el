@@ -1,6 +1,4 @@
-;;; init.el --- Emacs startup file -*- mode: elisp -*-
-
-;;; Commentary:
+;;; -*- mode: elisp -*-
 
 ;; Setup notes:
 ;; Font
@@ -12,15 +10,12 @@
 ;;   to fix partial line scrolling issue
 ;; - Seems related to fractional line scrolling issues
 
-;;; Code:
-
 (setq-default buffer-file-coding-system 'utf-8-unix) ; Use LF
 (setq buffer-file-coding-system 'utf-8-unix)
 
 (setq straight-repository-branch "develop")
 (defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+(let ((bootstrap-file (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 6))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
@@ -124,12 +119,32 @@
     (add-hook 'focus-out-hook 'xah-save-all-unsaved)
   (setq after-focus-change-function 'xah-save-all-unsaved))
 
+;; Hide modes from modeline
+(use-package diminish
+  :functions diminish
+  :config
+  (diminish 'eldoc-mode))
+
 (use-package modus-themes
   :config (load-theme 'modus-operandi t))
 
-(use-package which-key :config (which-key-mode))
+(use-package yascroll
+  :defines yascroll:delay-to-hide
+  :functions global-yascroll-bar-mode
+  :init (scroll-bar-mode -1)
+  :config
+  (setq yascroll:delay-to-hide nil)
+  (global-yascroll-bar-mode 1))
 
-(use-package flycheck :config (global-flycheck-mode))
+(use-package which-key
+  :diminish
+  :config (which-key-mode))
+
+(use-package flycheck
+  :functions global-flycheck-mode
+  :config
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  (global-flycheck-mode))
 
 (use-package vertico
   :init
@@ -243,9 +258,7 @@
   ;; relevant when you use the default completion UI.
   :hook (completion-list-mode . consult-preview-at-point-mode)
 
-  ;; The :init configuration is always executed (Not lazy)
   :init
-
   ;; Optionally configure the register formatting. This improves the register
   ;; preview for `consult-register', `consult-register-load',
   ;; `consult-register-store' and the Emacs built-ins.
@@ -260,10 +273,7 @@
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref)
 
-  ;; Configure other variables and modes in the :config section,
-  ;; after lazily loading the package.
   :config
-
   ;; Optionally configure preview. The default value
   ;; is 'any, such that any key triggers the preview.
   ;; (setq consult-preview-key 'any)
@@ -304,25 +314,14 @@
 
 
 (use-package embark
-  :ensure t
-
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
    ("C-;" . embark-dwim)        ;; good alternative: M-.
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
-
+  :hook (eldoc-documentation-functions . embark-eldoc-first-target)
   :init
-
-  ;; Optionally replace the key help with a completing-read interface
+  (define-key global-map [C-up-mouse-1] 'embark-act)
   (setq prefix-help-command #'embark-prefix-help-command)
-
-  ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
-  ;; strategy, if you want to see the documentation from multiple providers.
-  (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
-  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
-
-  :config
-
   ;; Hide the mode line of the Embark live/completions buffers
   (add-to-list 'display-buffer-alist
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
@@ -333,12 +332,13 @@
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 
 (use-package toc-org
-  :after (org)
+  :requires org
   :commands toc-org-enable
-  :hook (org-mode-hook . toc-org-enable))
+  :hook (org-mode . toc-org-enable))
 
 (use-package org-modern
-  :hook (org-mode-hook . org-modern-mode)
+  :requires org
+  :hook (org-mode . org-modern-mode)
   :config (set-face-attribute 'org-modern-symbol nil :family "Iosevka"))
 
 (use-package parinfer-rust-mode
@@ -347,9 +347,11 @@
 
 (use-package format-all
   :custom (format-all-show-errors 'warnings)
-  :hook (prog-mode-hook . format-all-ensure-formatter))
+  :hook (prog-mode . format-all-ensure-formatter))
 
 (use-package editorconfig
+  :functions editorconfig-mode
+  :diminish
   :config (editorconfig-mode 1))
 
 (use-package helpful
@@ -361,21 +363,14 @@
          ("C-h C" . helpful-command)
          ("C-c C-d" . helpful-at-point)))
 
-(use-package git-gutter
-  :hook (prog-mode . git-gutter-mode)
-  :config (setq git-gutter:update-interval 0.02))
 
-(use-package git-gutter-fringe)
-
-(use-package magit)
 
 ;;; TODO
 ;;; Whitespace
 ;;; aliases: (defalias 'f 'foo-command) https://www.wilkesley.org/~ian/xah/emacs/emacs_alias.html
 ;;; Folding? seems hard
 ;;; tree-sitter https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
-
-;;; init.el ends here
+;;; use-package adds '-hook' to :hook args - do I like this?
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -393,7 +388,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Iosevka NF Medium" :foundry "outline" :slant normal :weight medium :height 110 :width normal)))))
+ '(default ((t (:family "Iosevka NF Medium" :foundry "outline" :slant normal :weight medium :height 110 :width normal))))
+ '(yascroll:thumb-fringe ((t (:background "slate gray" :foreground "slate gray")))))
 ;; custom-set-faces was added by Custom.
 ;; If you edit it by hand, you could mess it up, so be careful.
 ;; Your init file should contain only one such instance.
