@@ -339,7 +339,9 @@
 (use-package org-modern
   :requires org
   :hook (org-mode . org-modern-mode)
-  :config (set-face-attribute 'org-modern-symbol nil :family "Iosevka"))
+  :config
+  (set-face-attribute 'org-modern-symbol nil :family "Iosevka")
+  (setq org-modern-star '("◈" "►" "◾" "▹")))
 
 (use-package parinfer-rust-mode
   :custom (parinfer-rust-auto-download t)
@@ -363,7 +365,22 @@
          ("C-h C" . helpful-command)
          ("C-c C-d" . helpful-at-point)))
 
+(use-package dash)
 
+(use-package evil
+  :init (setq evil-want-keybinding nil)
+  :config (evil-mode 1))
+
+(use-package evil-collection
+  :after evil
+  :config (evil-collection-init))
+
+(use-package org-evil
+  :after (dash evil))
+
+(use-package doom-modeline
+  :ensure t
+  :hook (after-init . doom-modeline-mode))
 
 ;;; TODO
 ;;; Whitespace
